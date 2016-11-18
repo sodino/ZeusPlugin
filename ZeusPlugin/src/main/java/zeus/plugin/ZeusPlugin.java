@@ -27,7 +27,9 @@ public class ZeusPlugin {
     public synchronized boolean install() {
         isInstalling = true;
         //创建插件安装目录
-        PluginUtil.createDir(PluginUtil.getPlugDir(mPluginId));
+//        PluginUtil.createDir(PluginUtil.getPlugDir(mPluginId));
+        String dir = PluginUtil.getPlugDir(mPluginId);
+        PluginUtil.createDirWithFile(dir);
 
         //将当前时间记录为插件的随机数，等效于android系统后面~1、~2等
         mInstalledPathInfo = String.valueOf(System.currentTimeMillis());
@@ -45,7 +47,8 @@ public class ZeusPlugin {
             return installAssetPlugin();
         }
         //把下载路径下的插件文件，直接重命名到安装目录，不需要耗时的拷贝过程。
-        boolean ret = PluginUtil.rename(PluginUtil.getZipPath(mPluginId), getAPKPath(mPluginId));
+        String apkPath = getAPKPath(mPluginId);
+        boolean ret = PluginUtil.rename(PluginUtil.getZipPath(mPluginId), apkPath);
         if (!ret) {
             isInstalling = false;
             mInstalledPathInfo = getInstalledPathInfoNoCache();
@@ -63,7 +66,7 @@ public class ZeusPlugin {
         //校验是否下载的是正确文件，如果插件下载错误则获取这个配置文件就会失败。
         PluginManifest meta = getPluginMeta();
         if (meta == null) {
-            PluginUtil.deleteFile(new File(getAPKPath(mPluginId)));
+            PluginUtil.deleteFile(new File(apkPath));
             mInstalledPathInfo = getInstalledPathInfoNoCache();
             isInstalling = false;
             return false;
@@ -92,16 +95,21 @@ public class ZeusPlugin {
                 isInstalling = false;
                 return true;
             }
-            PluginUtil.createDir(PluginUtil.getPlugDir(mPluginId));
+//            PluginUtil.createDir(PluginUtil.getPlugDir(mPluginId));
+            String dir = PluginUtil.getPlugDir(mPluginId);
+            PluginUtil.createDir(dir);
+
             mInstalledPathInfo = String.valueOf(System.currentTimeMillis());
+
+            String apkPath = getAPKPath(mPluginId);
 
             FileOutputStream out = null;
             InputStream in = null;
             try {
                 AssetManager am = PluginManager.mBaseResources.getAssets();
                 in = am.open(mPluginId + PluginConfig.PLUGIN_SUFF);
-                PluginUtil.createDirWithFile(getAPKPath(mPluginId));
-                out = new FileOutputStream(getAPKPath(mPluginId), false);
+                PluginUtil.createDirWithFile(apkPath);
+                out = new FileOutputStream(apkPath, false);
                 byte[] temp = new byte[2048];
                 int len;
                 while ((len = in.read(temp)) > 0) {
@@ -125,7 +133,7 @@ public class ZeusPlugin {
 
             meta = getPluginMeta();
             if (meta == null) {
-                PluginUtil.deleteFile(new File(getAPKPath(mPluginId)));
+                PluginUtil.deleteFile(new File(apkPath));
                 isAssetInstalling = false;
                 mInstalledPathInfo = getInstalledPathInfoNoCache();
                 return false;
@@ -184,7 +192,10 @@ public class ZeusPlugin {
         PluginUtil.createDir(insideLibPath);
         String apkLibPath = PluginUtil.getLibFile(cpuType);
         //首先将apk中libs文件夹下的一级so文件拷贝
-        return PluginUtil.unzipFile(getAPKPath(mPluginId), insideLibPath, apkLibPath);
+//        return PluginUtil.unzipFile(getAPKPath(mPluginId), insideLibPath, apkLibPath);
+        String apkPath = getAPKPath(mPluginId);
+        boolean result = PluginUtil.unzipFile(apkPath, insideLibPath, apkLibPath);
+        return result;
     }
 
     /**
@@ -194,7 +205,11 @@ public class ZeusPlugin {
      * @return 插件已经安装的apk路径
      */
     public String getAPKPath(String pluginName) {
-        return PluginUtil.getPlugDir(pluginName) + getInstalledPathInfo() + PluginConfig.PLUGIN_SUFF;
+        String dir = PluginUtil.getPlugDir(pluginName);
+        String installedPath = getInstalledPathInfo();
+        String result = dir + installedPath + PluginConfig.PLUGIN_SUFF;
+        return result;
+//        return PluginUtil.getPlugDir(pluginName) + getInstalledPathInfo() + PluginConfig.PLUGIN_SUFF;
     }
 
     /**
@@ -203,7 +218,9 @@ public class ZeusPlugin {
      * @return 当前安装的随机路径信息
      */
     public String getInstalledPathInfoNoCache() {
-        return PluginUtil.getInstalledPathInfo(mPluginId);
+//        return PluginUtil.getInstalledPathInfo(mPluginId);
+        String installedPath = PluginUtil.getInstalledPathInfo(mPluginId);
+        return installedPath;
     }
 
     /**
@@ -267,7 +284,9 @@ public class ZeusPlugin {
      * @return meta字符串
      */
     private String readMeta() {
-        return PluginUtil.readZipFileString(getAPKPath(mPluginId), PluginConfig.PLUGINWEB_MAINIFEST_FILE);
+        String apkPath = getAPKPath(mPluginId);
+        String result = PluginUtil.readZipFileString(apkPath, PluginConfig.PLUGINWEB_MAINIFEST_FILE);
+        return result;
     }
 
     /**

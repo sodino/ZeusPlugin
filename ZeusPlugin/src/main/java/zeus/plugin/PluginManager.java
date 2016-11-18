@@ -94,8 +94,10 @@ public class PluginManager {
     }
 
     private static void createPath() {
-        PluginUtil.createDir(PluginUtil.getInsidePluginPath());
-        PluginUtil.createDir(PluginUtil.getDexCacheParentDirectPath());
+        String insidePath = PluginUtil.getInsidePluginPath();
+        PluginUtil.createDir(insidePath);
+        String cachePath = PluginUtil.getDexCacheParentDirectPath();
+        PluginUtil.createDir(cachePath);
     }
 
     /**
@@ -288,7 +290,10 @@ public class PluginManager {
     }
 
     private static String getInstalledPluginListFilePath() {
-        return PluginUtil.getInsidePluginPath() + PLUGIN_INSTALLED_LIST_FILE_NAME;
+        String insidePath = PluginUtil.getInsidePluginPath();
+        String result = insidePath + PLUGIN_INSTALLED_LIST_FILE_NAME;
+//        return PluginUtil.getInsidePluginPath() + PLUGIN_INSTALLED_LIST_FILE_NAME;
+        return result;
     }
 
     /**
@@ -299,7 +304,9 @@ public class PluginManager {
      * @return 是否加载成功
      */
     public static boolean loadPlugin(String pluingId) {
-        return loadLastVersionPlugin(pluingId);
+        boolean result = loadLastVersionPlugin(pluingId);
+        return result;
+//        return loadLastVersionPlugin(pluingId);
     }
 
     /**

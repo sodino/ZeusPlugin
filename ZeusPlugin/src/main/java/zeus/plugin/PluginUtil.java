@@ -40,7 +40,10 @@ public class PluginUtil {
      * @return 插件的安装目录
      */
     public static String getPlugDir(String plugId) {
-        return getInsidePluginPath() + plugId + "/";
+        String insidePath = getInsidePluginPath();
+        String result = insidePath + plugId + "/";
+        return result;
+//        return getInsidePluginPath() + plugId + "/";
     }
 
     /**
@@ -52,7 +55,10 @@ public class PluginUtil {
         if (mInsidePluginPath != null) {
             return mInsidePluginPath;
         }
-        return mInsidePluginPath = PluginManager.mBaseContext.getFilesDir().getPath() + "/plugins/";
+        File dir = PluginManager.mBaseContext.getFilesDir();
+        String path = dir.getPath();
+//        return mInsidePluginPath = PluginManager.mBaseContext.getFilesDir().getPath() + "/plugins/";
+        return path + "/plugins/";
     }
 
     /**
@@ -62,7 +68,11 @@ public class PluginUtil {
      * @return 安装后的某个插件文件路径
      */
     public static String getAPKPath(String pluginName) {
-        return PluginUtil.getPlugDir(pluginName) + getInstalledPathInfo(pluginName) + PluginConfig.PLUGIN_SUFF;
+//        return PluginUtil.getPlugDir(pluginName) + getInstalledPathInfo(pluginName) + PluginConfig.PLUGIN_SUFF;
+        String dir = PluginUtil.getPlugDir(pluginName);
+        String installedPath = getInstalledPathInfo(pluginName);
+        String result = dir + installedPath + PluginConfig.PLUGIN_SUFF;
+        return result;
     }
 
     /**
@@ -72,7 +82,10 @@ public class PluginUtil {
      * @return 安装前某个插件文件的路径
      */
     public static String getZipPath(String pluginName) {
-        return getPlugDir(pluginName) + pluginName;
+//        return getPlugDir(pluginName) + pluginName;
+        String dir = getPlugDir(pluginName);
+        String result = dir + pluginName;
+        return result;
     }
 
     /**
@@ -91,7 +104,10 @@ public class PluginUtil {
      * @return 优化后的odex/opt文件的文件夹路径
      */
     public static String getDexCacheParentDirectPath() {
-        return getInsidePluginPath() + "dalvik-cache/";
+        String insidePath = getInsidePluginPath();
+        String result = insidePath + "dalvik-cache/";
+        return result;
+//        return getInsidePluginPath() + "dalvik-cache/";
     }
 
     /**
@@ -101,7 +117,13 @@ public class PluginUtil {
      * @return 某个插件安装后so文件存放目录
      */
     public static String getLibFileInside(String pluginName) {
-        return getInsidePluginPath() + pluginName + "/" + getInstalledPathInfo(pluginName) + "/" + getLibFile(getCpuArchitecture());
+        String insidePath = getInsidePluginPath();
+        String installedPath = getInstalledPathInfo(pluginName);
+        int cpuArc = getCpuArchitecture();
+        String lib = getLibFile(cpuArc);
+//        return getInsidePluginPath() + pluginName + "/" + getInstalledPathInfo(pluginName) + "/" + getLibFile(getCpuArchitecture());
+        String result = insidePath + pluginName + "/" + installedPath + "/" + lib;
+        return result;
     }
     //end========================获取插件相关目录的方法======================end
 
@@ -488,7 +510,9 @@ public class PluginUtil {
      */
     public static String getInstalledPathInfo(String pluginId) {
         String result = null;
-        String libFileInfoPath = getPlugDir(pluginId) + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
+//        String libFileInfoPath = getPlugDir(pluginId) + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
+        String dir = getPlugDir(pluginId);
+        String libFileInfoPath = dir + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
         BufferedInputStream bis = null;
         ByteArrayOutputStream baos = null;
         try {
@@ -518,7 +542,9 @@ public class PluginUtil {
      * @return 是否成功
      */
     public static boolean writePathInfo(String pluginId, String installedPathInfo) {
-        String infoPath = PluginUtil.getPlugDir(pluginId) + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
+//        String infoPath = PluginUtil.getPlugDir(pluginId) + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
+        String dir = PluginUtil.getPlugDir(pluginId);
+        String infoPath = dir + PluginConfig.PLUGIN_INSTALLED_INFO_PATH;
         File file = new File(infoPath);
         FileOutputStream out = null;
         try {
