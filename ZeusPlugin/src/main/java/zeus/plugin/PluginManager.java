@@ -119,8 +119,11 @@ public class PluginManager {
                 boolean ret = plugin.installAssetPlugin();
                 //提前将dex文件优化为odex或者opt文件
                 if (ret) {
+                    String apkPath = PluginUtil.getAPKPath(key);
+                    String cachePath = PluginUtil.getDexCacheParentDirectPath();
                     try {
-                        new DexClassLoader(PluginUtil.getAPKPath(key), PluginUtil.getDexCacheParentDirectPath(), null, mBaseClassLoader.getParent());
+//                        new DexClassLoader(PluginUtil.getAPKPath(key), PluginUtil.getDexCacheParentDirectPath(), null, mBaseClassLoader.getParent());
+                        new DexClassLoader(apkPath, cachePath, null, mBaseClassLoader.getParent());
                     } catch (Throwable e) {
                         e.printStackTrace();
                     }
