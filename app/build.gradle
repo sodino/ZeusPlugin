@@ -6,7 +6,7 @@ apply plugin: 'patch-gradle-plugin'
 apply plugin: 'jar-gradle-plugin'//生成jar包插件
 android {
     compileSdkVersion 23
-    buildToolsVersion '23.0.2'
+    buildToolsVersion '24.0.2'
 
     defaultConfig {
         applicationId "zeus.test"
